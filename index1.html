@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Real Estate app</title>
+  <style>
+    body { font-family: sans-serif; max-width: 600px; margin: 2em auto; }
+    section { display: none; }
+    section.active { display: block; }
+    input, button, select { margin: .5em 0; width: 100%; padding: .5em; }
+    nav a { display: inline-block; margin: .3em .5em .3em 0; cursor: pointer; color: blue; text-decoration: underline; }
+    table { width: 100%; border-collapse: collapse; margin-top: 1em; }
+    th, td { border: 1px solid #ccc; padding: .3em; text-align: right; }
+    th { background: #eee; }
+  </style>
+
+  <!-- your JS (reordered) -->
+  <script src="app1.js" defer></script>
+</head>
+<body>
+  <!-- LOGIN -->
+  <section id="loginSection" class="active">
+    <h1>Log in</h1>
+    <div id="loginError" style="color:red"></div>
+    <input id="username" placeholder="Username">
+    <input id="password" type="password" placeholder="Password">
+    <button id="loginBtn">Log In</button>
+  </section>
+
+  <!-- DASHBOARD -->
+  <section id="dashboardSection">
+    <h1>Welcome, <span id="userLabel"></span>!</h1>
+    <nav>
+      <a data-show="addPropSection">1) Add property</a>
+      <a data-show="deletePropSection">2) Delete property</a>
+      <a data-show="sortPriceSection">3) Sort by price</a>
+      <a data-show="sortAreaSection">4) Sort by surface</a>
+      <a data-show="auctionBuySection">5) Auction buy</a>
+      <a data-show="auctionRentSection">6) Auction rent</a>
+      <a data-show="mortgageSection">7) Mortgage</a>
+      <a data-show="investmentSection">8) Investment</a>
+      <a data-show="riskSection">9) Risk analysis</a>
+      <a data-show="eligibilitySection">10) Loan eligibility</a>
+      <a data-show="sortROISection">11) Sort ROI</a>
+      <a data-show="yieldSection">12) Invest yield</a>
+      <a data-show="taxSection">13) Tax</a>
+      <a data-show="amortSection">14) Amortization schedule</a>
+      <a data-show="forecastSection">15) Forecast</a>
+      <a id="logoutLink" style="color:red">16) Log out</a>
+    </nav>
+  </section>
+  <!-- 1) Mortgage -->
+  <section id="mortgageSection">
+    <h2>Mortgage analysis</h2>
+    <input id="m_income"      placeholder="Monthly income">
+    <input id="m_loanAmt"     placeholder="Loan amount">
+    <input id="m_annualRate"  placeholder="Annual rate (%)">
+    <input id="m_termYears"   placeholder="Term (years)">
+    <button id="calcMortgage">Calculate</button>
+    <div id="mortgageResult"></div>
+    <p><a data-show="dashboardSection">← Back</a></p>
+  </section>
+  <!-- 2) Investment -->
+  <section id="investmentSection">
+    <h2>Investment analysis</h2>
+    <input id="i_amount"    placeholder="Investment amount">
+    <input id="i_annualRet" placeholder="Expected annual return (%)">
+    <input id="i_years"     placeholder="Years">
+    <button id="calcInvestment">Calculate FV</button>
+    <div id="investmentResult"></div>
+    <p><a data-show="dashboardSection">← Back</a></p>
+  </section>
+  <!-- 3) Risk Analysis -->
+  <section id="riskSection">
+    <h2>Risk analysis</h2>
+    <input id="r_annualRet" placeholder="Expected annual return (%)">
+    <input id="r_years"     placeholder="Years">
+    <button id="calcRisk">Compute risk score</button>
+    <div id="riskResult"></div>
+    <p><a data-show="dashboardSection">← Back</a></p>
+  </section>
+  <!-- 4) Loan Eligibility -->
+  <section id="eligibilitySection">
+    <h2>Loan eligibility</h2>
+    <input id="e_income"     placeholder="Monthly income">
+    <input id="e_loanAmt"    placeholder="Loan amount">
+    <input id="e_annualRate" placeholder="Annual rate (%)">
+    <input id="e_termYears"  placeholder="Term (years)">
+    <button id="checkEligibility">Check</button>
+    <div id="eligibilityResult"></div>
+    <p><a data-show="dashboardSection">← Back</a></p>
+  </section>
+  <!-- 5) Sort ROI -->
+  <section id="sortROISection">
+    <h2>Sort properties by Return on Investment</h2>
+    <button id="doSortROI">Sort & Show</button>
+    <div id="sortROIResult"></div>
+    <p><a data-show="dashboardSection">← Back</a></p>
+  </section>
+  <!-- 6) Auction Buy Price -->
+  <section id="auctionBuySection">
+    <h2>Auction buy price</h2>
+    <input id="ab_base"      placeholder="Base price">
+    <select id="ab_condition">
+      <option value="0.85">No renovation</option>
+      <option value="0.9">Cosmetic</option>
+      <option value="1.1">White box</option>
+      <option value="1.3">Euro-renovation</option>
+    </select>
+    <input id="ab_zone"      placeholder="Zone coefficient">
+    <button id="calcAuctionBuy">Calc buy</button>
+    <div id="auctionBuyResult"></div>
+    <p><a data-show="dashboardSection">← Back</a></p>
+  </section>
+  <!-- 7) Auction Rent Price -->
+  <section id="auctionRentSection">
+    <h2>Auction rent price</h2>
+    <input id="ar_buyPrice"  placeholder="Purchase price">
+    <input id="ar_rentCoef"  placeholder="Rent coefficient (e.g. 0.005)">
+    <button id="calcAuctionRent">Calc rent</button>
+    <div id="auctionRentResult"></div>
+    <p><a data-show="dashboardSection">← Back</a></p>
+  </section>
+  <!-- 8) Investment Yield -->
+  <section id="yieldSection">
+    <h2>Investment yield</h2>
+    <button id="calcYield">Compute yield (%)</button>
+    <div id="yieldResult"></div>
+    <p><a data-show="dashboardSection">← Back</a></p>
+  </section>
+  <!-- 9) Property Tax -->
+  <section id="taxSection">
+    <h2>Property tax</h2>
+    <input id="t_price"    placeholder="Property price">
+    <input id="t_rate"     placeholder="Tax rate (%)">
+    <button id="calcTax">Calc tax</button>
+    <div id="taxResult"></div>
+    <p><a data-show="dashboardSection">← Back</a></p>
+  </section>
+  <!-- 10) Amortization Schedule -->
+  <section id="amortSection">
+    <h2>Amortization schedule</h2>
+    <input id="am_price"      placeholder="Loan amount">
+    <input id="am_rate"       placeholder="Annual rate (%)">
+    <input id="am_term"       placeholder="Term (years)">
+    <button id="genAmort">Generate</button>
+    <div id="amortResult"></div>
+    <p><a data-show="dashboardSection">← Back</a></p>
+  </section>
+  <!-- 11) Price Forecast -->
+  <section id="forecastSection">
+    <h2>Price forecast</h2>
+    <input id="f_current" placeholder="Current price">
+    <input id="f_rate"    placeholder="Monthly growth rate (e.g. 0.0057)">
+    <input id="f_months"  placeholder="Months ahead">
+    <button id="genForecast">Generate</button>
+    <div id="forecastResult"></div>
+    <p><a data-show="dashboardSection">← Back</a></p>
+  </section>
+  <!-- 12) Add Property -->
+  <section id="addPropSection">
+    <h2>Add property</h2>
+    <input id="p_name"        placeholder="Name">
+    <input id="p_invAmt"      placeholder="Investment amount">
+    <input id="p_expRet"      placeholder="Exp. annual return (%)">
+    <input id="p_years"       placeholder="Years">
+    <input id="p_area"        placeholder="Area">
+    <input id="p_price"       placeholder="Price">
+    <button id="addProperty">Add</button>
+    <div id="addPropResult"></div>
+    <p><a data-show="dashboardSection">← Back</a></p>
+  </section>
+  <!-- 13) Delete Property -->
+  <section id="deletePropSection">
+    <h2>Delete property</h2>
+    <input id="del_index" placeholder="Index (starting at 1)">
+    <button id="deleteProperty">Delete</button>
+    <div id="deletePropResult"></div>
+    <p><a data-show="dashboardSection">← Back</a></p>
+  </section>
+  <!-- 14) Sort by Price -->
+  <section id="sortPriceSection">
+    <h2>Sort by price</h2>
+    <button id="doSortPrice">Sort & Show</button>
+    <div id="sortPriceResult"></div>
+    <p><a data-show="dashboardSection">← Back</a></p>
+  </section>
+  <!-- 15) Sort by Surface -->
+  <section id="sortAreaSection">
+    <h2>Sort by surface</h2>
+    <button id="doSortArea">Sort & Show</button>
+    <div id="sortAreaResult"></div>
+    <p><a data-show="dashboardSection">← Back</a></p>
+  </section>
+  <script src="app.js"></script>
+</body>
+</html>
